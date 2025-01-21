@@ -1,0 +1,16 @@
+# Ignore project files and temporary files
+*.iml
+*.log
+*.tmp
+*.txt
+
+# Ignore shell script output
+*.sh~
+
+# Ignore version control files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE-specific files
+.idea/
+.vscode/
