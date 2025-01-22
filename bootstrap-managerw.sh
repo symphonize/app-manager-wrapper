@@ -8,7 +8,7 @@ set -euo pipefail
 WRAPPER_URL="https://raw.githubusercontent.com/symphonize/app-manager-wrapper/main/managerw.sh"
 DEFAULT_MANAGER_URL="https://raw.githubusercontent.com/symphonize/app-manager-wrapper/main/manager.sh"
 MANAGERW_PATH="./managerw"
-ENV_FILE="./.env"
+ENV_FILE="./.env_url"
 
 # Colors for output
 GREEN="\033[1;32m"
