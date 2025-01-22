@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Metadata
-# Version: 2025.03.220956+0e275c5
+# Version: 2025.03.297851+81db901
 
 # Configuration
 WRAPPER_URL="https://raw.githubusercontent.com/symphonize/app-manager-wrapper/main/managerw.sh"

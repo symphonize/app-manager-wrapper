@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Metadata
-# Version: 2025.03.220959+0e275c5
+# Version: 2025.03.297837+81db901
 
 # Configuration
 WRAPPER_URL="https://raw.githubusercontent.com/symphonize/app-manager-wrapper/main/managerw.sh"
@@ -60,7 +60,7 @@ install_wrapper() {
 
 # Test the Wrapper script to ensure it works
 validate_wrapper() {
-  if ! bash "$MANAGERW_PATH" --help &>/dev/null; then
+  if ! bash "$MANAGERW_PATH" --version &>/dev/null; then
     error "The downloaded managerw script is not valid or executable. Please check the URL or script."
   fi
   success "Wrapper script is valid and ready to use."

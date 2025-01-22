@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Metadata
-# Version: 2025.03.220981+0e275c5
+# Version: 2025.03.297857+81db901
 
 # Example Manager Script
 # This script provides a basic template for creating your own manager.sh script.
