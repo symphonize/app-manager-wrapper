@@ -31,7 +31,7 @@ To install the `managerw.sh` script, run the following command:
 If you need to specify a custom `MANAGER_URL`, pass it as an environment variable before running the command:
 
 ```bash
-MANAGER_URL="https://raw.githubusercontent.com/symphonize/app-manager-wrapper/main/manager.sh" /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/your-repo/main/bootstrap-manager.sh) install"
+MANAGER_URL="https://raw.githubusercontent.com/symphonize/app-manager-wrapper/main/manager.sh" /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/symphonize/app-manager-wrapper/main/bootstrap-manager.sh) install"
 ```
 
 This command:

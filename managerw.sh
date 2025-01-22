@@ -10,12 +10,18 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ENV_FILE="${SCRIPT_DIR}/.env"
 CACHE_DIR="${HOME}/.app-manager-wrapper/cache"
 CACHE_TTL=$((60 * 60))  # 1 hour in seconds
+PAT_FILE="$HOME/.github/pat.token"
 
 # Dynamically set the cache file name based on MANAGER_URL
 if [[ -f "$ENV_FILE" ]]; then
   export $(grep -v '^#' "$ENV_FILE" | xargs)
 else
   echo "Configuration file $ENV_FILE not found. Please create it using the bootstrap-manager.sh script."
+  exit 1
+fi
+
+if [[ -z "${MANAGER_URL:-}" ]]; then
+  echo "MANAGER_URL is not set in $ENV_FILE. Please configure it."
   exit 1
 fi
 
@@ -65,6 +71,20 @@ extract_version() {
 
 # Fetch the latest manager script
 fetch_manager() {
+#  echo "Fetching the bootstrap script from $MANAGER_URL..."
+#  if [[ -f "$PAT_FILE" ]]; then
+#    echo "Found PAT token file at $PAT_FILE"
+#    PAT_TOKEN=$(<"$PAT_FILE")
+#    curl -sSL -o "$CACHE_FILE" "$MANAGER_URL" || error "Failed to download manager script from $MANAGER_URL."
+#    curl -H "Authorization: token $PAT_TOKEN" -O "$MANAGER_URL" || error "Failed to fetch the bootstrap script from $MANAGER_URL."
+#    success "Manager script fetched successfully!"
+#  else
+#    echo "Fetching without authentication (PAT not found)..."
+#    curl -sSL -O "$MANAGER_URL" || error "Failed to fetch the bootstrap script from $MANAGER_URL."
+#    success "Manager script fetched successfully!"
+#  fi
+
+
   echo "Fetching the latest manager script from $MANAGER_URL..."
   curl -sSL -o "$CACHE_FILE" "$MANAGER_URL" || error "Failed to download manager script from $MANAGER_URL."
   chmod +x "$CACHE_FILE"
