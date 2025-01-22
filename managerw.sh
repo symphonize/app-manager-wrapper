@@ -7,14 +7,14 @@ set -euo pipefail
 # Configuration
 WRAPPER_URL="https://raw.githubusercontent.com/symphonize/app-manager-wrapper/main/managerw.sh"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ENV_FILE="${SCRIPT_DIR}/.env"
+ENV_FILE="${SCRIPT_DIR}/.app-manager-env"
 CACHE_DIR="${HOME}/.app-manager-wrapper/cache"
 CACHE_TTL=$((60 * 60))  # 1 hour in seconds
 PAT_FILE="$HOME/.github/pat.token"
 
 # Dynamically set the cache file name based on MANAGER_URL
 if [[ -f "$ENV_FILE" ]]; then
-  export $(grep -v '^#' "$ENV_FILE" | xargs)
+  source "$ENV_FILE"
 else
   echo "Configuration file $ENV_FILE not found. Please create it using the bootstrap-manager.sh script."
   exit 1
@@ -68,27 +68,30 @@ extract_version() {
     echo "unknown"
   fi
 }
+# Function to display PAT setup instructions
+display_pat_error() {
+  echo -e "${RED}Failed to fetch the manager script from $MANAGER_URL.${RESET}"
+  echo -e "Ensure your GitHub Personal Access Token (PAT) is set up correctly."
+  echo -e "\nTo create a GitHub PAT, follow these steps:"
+  echo -e "1. Go to https://github.com/settings/tokens."
+  echo -e "2. Click 'Generate new token' (classic)."
+  echo -e "3. Set the scope to at least 'repo' for accessing private repositories."
+  echo -e "4. Save the token to the file: $PAT_FILE\n"
+  exit 1
+}
 
-# Fetch the latest manager script
+# Fetch the latest manager script using MANAGER_URL
 fetch_manager() {
-#  echo "Fetching the bootstrap script from $MANAGER_URL..."
-#  if [[ -f "$PAT_FILE" ]]; then
-#    echo "Found PAT token file at $PAT_FILE"
-#    PAT_TOKEN=$(<"$PAT_FILE")
-#    curl -sSL -o "$CACHE_FILE" "$MANAGER_URL" || error "Failed to download manager script from $MANAGER_URL."
-#    curl -H "Authorization: token $PAT_TOKEN" -O "$MANAGER_URL" || error "Failed to fetch the bootstrap script from $MANAGER_URL."
-#    success "Manager script fetched successfully!"
-#  else
-#    echo "Fetching without authentication (PAT not found)..."
-#    curl -sSL -O "$MANAGER_URL" || error "Failed to fetch the bootstrap script from $MANAGER_URL."
-#    success "Manager script fetched successfully!"
-#  fi
-
-
-  echo "Fetching the latest manager script from $MANAGER_URL..."
-  curl -sSL -o "$CACHE_FILE" "$MANAGER_URL" || error "Failed to download manager script from $MANAGER_URL."
-  chmod +x "$CACHE_FILE"
-  success "Fetched and cached the latest manager script."
+  echo "Fetching the manager script from $MANAGER_URL..."
+  if [[ -f "$PAT_FILE" ]]; then
+    echo "Found PAT token file at $PAT_FILE. Using for authentication."
+    PAT_TOKEN=$(<"$PAT_FILE")
+    curl -sSL -o "$CACHE_FILE" -H "Authorization: token $PAT_TOKEN" "$MANAGER_URL" || display_pat_error
+    chmod +x "$CACHE_FILE"
+    success "Fetched and cached the latest manager script."
+  else
+    display_pat_error
+  fi
 }
 
 # Check for updates to managerw
