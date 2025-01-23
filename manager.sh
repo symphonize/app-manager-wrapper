@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Metadata
-# Version: 2025.03.297857+81db901
+# Version: 2025.03.384306+5e409a8
 
 # Example Manager Script
 # This script provides a basic template for creating your own manager.sh script.
@@ -10,7 +10,10 @@ set -euo pipefail
 
 # Configuration
 APP_NAME="example-app"
-DEFAULT_LOG_FILE="./${APP_NAME}_log.txt"
+
+LOG_DIR="${LOG_FILE_DIR:-./}"
+DEFAULT_LOG_FILE="${LOG_DIR}/${APP_NAME}_log.txt"
+
 
 # Colors for output
 GREEN="\033[1;32m"
@@ -64,6 +67,12 @@ Commands:
   prod                 Run the application in production mode.
   stop                 Stop the application.
   help                 Show this help message.
+
+Options:
+  --help               Show this help message.
+
+Environment Variables:
+  LOG_FILE_DIR     Base directory for log files (default: ./).
 
 Examples:
   $0 build

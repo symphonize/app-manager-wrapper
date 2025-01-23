@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Metadata
-# Version: 2025.03.297837+81db901
+# Version: 2025.03.384286+5e409a8
 
 # Configuration
 WRAPPER_URL="https://raw.githubusercontent.com/symphonize/app-manager-wrapper/main/managerw.sh"
@@ -24,6 +24,20 @@ success() {
 error() {
   echo -e "${RED}Error:${RESET} $1"
   exit 1
+}
+
+# Detect macOS and ensure Homebrew is installed
+install_homebrew_on_mac() {
+  if [[ "$(uname)" == "Darwin" ]]; then
+    echo "Detected macOS. Checking for Homebrew..."
+    if ! command -v brew &>/dev/null; then
+      echo "Homebrew not found. Installing..."
+      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || error "Failed to install Homebrew."
+      success "Homebrew installed successfully."
+    else
+      success "Homebrew is already installed."
+    fi
+  fi
 }
 
 # Create or update the .env file
@@ -72,6 +86,7 @@ main() {
 
   case "${1:-}" in
     install)
+      install_homebrew_on_mac  # Check and install Homebrew if needed
       create_env_file "$manager_url"
       install_wrapper
       validate_wrapper
